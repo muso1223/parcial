@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Coordinadores - Parcial SaberPRO</title>
+    <style>
+        body {
+            background-color: #f7f9fb;
+            font-family: 'Open Sans', 'Segoe UI', sans-serif;
+            color: #1e2b38;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        main { flex: 1; }
+
+        /* ===== HEADER ===== */
+        header {
+            background-color: #0b4a70;
+            color: white;
+            padding: 18px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+        .header-acciones {
+            display: flex;
+            gap: 10px;
+        }
+        .btn-cerrar, .btn-volver {
+            padding: 8px 16px;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        .btn-cerrar { background-color: #c4d92e; color: #0b4a70; }
+        .btn-cerrar:hover { background-color: #b3c628; }
+        .btn-volver { background-color: #ffffff; color: #0b4a70; border: 2px solid #0b4a70; }
+        .btn-volver:hover { background-color: #f1f8fa; }
+
+        /* ===== CONTENEDOR ===== */
+        .contenedor-principal {
+            width: 95%;
+            max-width: 1400px;
+            margin: 40px auto;
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 30px 40px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+        }
+        h2 {
+            color: #0b4a70;
+            margin-bottom: 12px;
+            border-bottom: 3px solid #c4d92e;
+            padding-bottom: 6px;
+        }
+        .bienvenida {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #444;
+            margin-bottom: 20px;
+        }
+
+        /* ===== FILTRO ===== */
+        .filtro {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .filtro label {
+            font-weight: 600;
+            color: #0b4a70;
+        }
+        .filtro input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 2px solid #0b4a70;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+        .filtro input:focus {
+            border-color: #c4d92e;
+            box-shadow: 0 0 6px rgba(196,217,46,0.5);
+        }
+
+        /* ===== TABLA ===== */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            table-layout: auto;
+        }
+        th {
+            background-color: #e6eef3;
+            color: #0b4a70;
+            text-align: left;
+            padding: 10px 14px;
+            font-weight: 600;
+            border-bottom: 2px solid #c4d92e;
+        }
+        td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #ddd;
+            font-size: 0.95rem;
+            word-break: break-word;
+        }
+        tr:hover { background-color: #f1f8fa; }
+
+        /* ===== BOTONES ===== */
+        .acciones {
+            display: flex;
+            gap: 6px;
+        }
+        .btn-accion {
+            background-color: #0b4a70;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        .btn-accion:hover { background-color: #093b5a; transform: scale(1.05); }
+        .btn-eliminar { background-color: #c62828; }
+        .btn-eliminar:hover { background-color: #a61e1e; }
+		.btn-crear {
+		    display: inline-block;
+		    background-color: #0b4a70;
+		    color: #edeff1;
+		    padding: 10px 22px;
+		    border-radius: 5px;
+		    font-weight: 700;
+		    text-decoration: none;
+		    transition: all 0.2s ease;
+		}
+
+        .btn-crear:hover { background-color: #083551; }
+
+        /* ===== PIE ===== */
+        footer {
+            text-align: center;
+            padding: 15px 0;
+            background-color: #0b4a70;
+            color: white;
+            font-size: 0.9rem;
+            letter-spacing: 0.2px;
+            margin-top: auto;
+        }
+
+        /* ===== PAGINACIÓN ===== */
+        .btn-pagina {
+            padding: 6px 12px;
+            margin: 0 3px;
+            border: 1px solid #0b4a70;
+            border-radius: 4px;
+            background-color: #ffffff;
+            color: #0b4a70;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        .btn-pagina:hover:not(:disabled) { background-color: #e6eef3; }
+        .btn-pagina:disabled { background-color: #0b4a70; color: #ffffff; cursor: default; }
+
+        @media (max-width: 768px) {
+            .contenedor-principal { padding: 20px; }
+            table { font-size: 0.85rem; }
+            .acciones { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Gestión de Coordinadores - Parcial SaberPRO</h1>
+    <div class="header-acciones">
+        <a href="/admin/panel" class="btn-volver">← Volver</a>
+        <a th:href="@{/logout}" class="btn-cerrar">Cerrar sesión</a>
+    </div>
+</header>
+
+<main>
+    <div class="contenedor-principal">
+        <div class="bienvenida">Bienvenido(a), Coordinador</strong></div>
+
+        <h2>Gestión de Coordinadores</h2>
+
+		<div class="filtro">
+		    <label for="busqueda">Buscar:</label>
+		    <input type="text" id="busqueda" placeholder="Escriba nombre o cédula...">
+		</div>
+
+		<a href="/admin/coordinadores/nuevo" class="btn-crear" style="margin-top: 20px;" >➕ Crear Coordinador</a>
+
+        <!-- TABLA -->
+        <table id="tablaCoordinadores">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Documento</th>
+                    <th>Nombre</th>
+                    <th>Correo</th>
+                    <th>Teléfono</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="c : ${coordinadores}">
+                    <td th:text="${c.id}"></td>
+                    <td th:text="${c.numdoc}"></td>
+                    <td th:text="${c.pnomb + ' ' + c.papellido}"></td>
+                    <td th:text="${c.correo}"></td>
+                    <td th:text="${c.telefono}"></td>
+                    <td class="acciones">
+                        <a th:href="@{'/admin/coordinadores/editar/' + ${c.id}}" class="btn-accion">✏️ Editar</a>
+                        <a th:href="@{'/admin/coordinadores/eliminar/' + ${c.id}}" class="btn-accion btn-eliminar"
+                           onclick="return confirm('¿Seguro que deseas eliminar este coordinador?')">🗑 Eliminar</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<footer>
+    © ${pageContext.request.serverName} — Parcial SaberPRO
+</footer>
+
+<!-- SCRIPT DE FILTRO Y PAGINACIÓN -->
+<script>
+    const inputBusqueda = document.getElementById('busqueda');
+    const filas = document.querySelectorAll('#tablaCoordinadores tbody tr');
+
+    inputBusqueda.addEventListener('keyup', function() {
+        const filtro = this.value.toLowerCase();
+        filas.forEach(fila => {
+            const nombre = fila.cells[2].textContent.toLowerCase();
+            const cedula = fila.cells[1].textContent.toLowerCase();
+            fila.style.display = (nombre.includes(filtro) || cedula.includes(filtro)) ? '' : 'none';
+        });
+    });
+
+    const filasTabla = Array.from(document.querySelectorAll('#tablaCoordinadores tbody tr'));
+    const filasPorPagina = 7;
+    let paginaActual = 1;
+    const totalPaginas = Math.ceil(filasTabla.length / filasPorPagina);
+
+    function mostrarPagina(pagina) {
+        const inicio = (pagina - 1) * filasPorPagina;
+        const fin = inicio + filasPorPagina;
+        filasTabla.forEach((fila, index) => {
+            fila.style.display = (index >= inicio && index < fin) ? '' : 'none';
+        });
+        actualizarBotones();
+    }
+
+    function actualizarBotones() {
+        const paginacion = document.getElementById('paginacion');
+        paginacion.innerHTML = '';
+
+        for (let i = 1; i <= totalPaginas; i++) {
+            const btn = document.createElement('button');
+            btn.textContent = i;
+            btn.className = 'btn-pagina';
+            if (i === paginaActual) btn.disabled = true;
+            btn.addEventListener('click', () => {
+                paginaActual = i;
+                mostrarPagina(paginaActual);
+            });
+            paginacion.appendChild(btn);
+        }
+    }
+
+    // Crear contenedor de paginación
+    const divPaginacion = document.createElement('div');
+    divPaginacion.id = 'paginacion';
+    divPaginacion.style.marginTop = '15px';
+    divPaginacion.style.textAlign = 'center';
+    divPaginacion.style.gap = '5px';
+    document.querySelector('.contenedor-principal').appendChild(divPaginacion);
+
+    mostrarPagina(paginaActual);
+</script>
+
+</body>
+</html>

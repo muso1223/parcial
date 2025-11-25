@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Informe de Beneficios</title>
+
+    <style>
+        body {
+            font-family: 'Open Sans', 'Segoe UI', sans-serif;
+            background-color: #f7f9fb;
+            color: #1e2b38;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .informe-container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 900px;
+            overflow: hidden;
+        }
+
+        .informe-header {
+            background-color: #0b4a70;
+            color: #fff;
+            padding: 20px 30px;
+            text-align: center;
+        }
+
+        .informe-header h2 {
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .seccion {
+            padding: 25px 30px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .seccion:last-child {
+            border-bottom: none;
+        }
+
+        .seccion h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #0b4a70;
+            border-bottom: 2px solid #c4d92e;
+            display: inline-block;
+            padding-bottom: 4px;
+            font-weight: 600;
+        }
+
+        /* DATOS */
+        .datos-alumno {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px 30px;
+        }
+
+        .dato {
+            background-color: #f1f8fa;
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+
+        .dato strong {
+            color: #0b4a70;
+            display: block;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+        /* TARJETA PUNTAJE */
+        .tarjeta-grande {
+            background-color: #f1f8fa;
+            padding: 25px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-top: 15px;
+        }
+
+        .tarjeta-grande .valor {
+            display: block;
+            font-size: 1.6rem;
+            margin-top: 10px;
+            color: #0b4a70;
+        }
+
+        .beneficio-box {
+            background-color: #f1f8fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            font-weight: 600;
+            text-align: center;
+            font-size: 1.05rem;
+        }
+
+        .anulado {
+            color: #c62828;
+            font-weight: bold;
+        }
+
+        .volver-container {
+            text-align: center;
+            padding: 20px 0;
+            background-color: #f7f9fb;
+        }
+
+        .btn-volver {
+            display: inline-block;
+            background-color: #c4d92e;
+            color: #0b4a70;
+            padding: 10px 25px;
+            border-radius: 6px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-volver:hover {
+            background-color: #b3c628;
+        }
+
+        @media (max-width: 700px) {
+            body {
+                padding: 20px 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="informe-container">
+    <div class="informe-header">
+        <h2>Informe de Beneficios del Alumno</h2>
+    </div>
+
+    <!-- DATOS DEL ALUMNO -->
+    <div class="seccion">
+        <h3>Datos del Alumno</h3>
+
+        <div class="datos-alumno">
+
+            <div class="dato">
+                <strong>Nombre</strong>
+                <span th:text="${examen.usuario.pnomb + ' ' + examen.usuario.snomb + ' ' +
+                                examen.usuario.papellido + ' ' + examen.usuario.sapellido}"></span>
+            </div>
+
+            <div class="dato">
+                <strong>Documento</strong>
+                <span th:text="${examen.usuario.tdoc + ' ' + examen.usuario.numdoc}"></span>
+            </div>
+
+            <div class="dato">
+                <strong>Correo</strong>
+                <span th:text="${examen.usuario.correo}"></span>
+            </div>
+
+            <div class="dato">
+                <strong>Teléfono</strong>
+                <span th:text="${examen.usuario.telefono}"></span>
+            </div>
+
+            <div class="dato">
+                <strong>Registro</strong>
+                <span th:text="${examen.usuario.registro}"></span>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- RESUMEN -->
+    <div class="seccion">
+        <h3>Resumen</h3>
+
+        <div class="tarjeta-grande">
+            Puntaje Total
+            <span class="valor"
+                  th:text="${examen.anulado ? 'ANULADO' : examen.puntajetotal}">
+            </span>
+        </div>
+
+        <div class="beneficio-box">
+
+            <span th:if="${examen.anulado}">---</span>
+
+            <span th:unless="${examen.anulado}"
+                  th:text="  ${examen.puntajetotal >=180 and examen.puntajetotal <=210 ?
+                           'Se exonera de la entrega del informe final de trabajo de grado, o de realizar Seminario de grado IV, con nota de 4.5' :
+                           examen.puntajetotal >=211 and examen.puntajetotal <=240 ?
+                           'Se exonera de la entrega del informe final de trabajo de grado, o de realizar Seminario de grado IV, con nota de 4.7 y beca del 50%' :
+                           examen.puntajetotal >240 ?
+                           'Se exonera de la entrega del informe final de trabajo de grado, o de realizar Seminario de grado IV, con nota de 5.0 y beca del 100%' :
+                           'El estudiante no ha ganado ningún beneficio'}">
+            </span>
+
+        </div>
+
+    </div>
+
+    <!-- BOTÓN VOLVER -->
+    <div class="volver-container">
+        <a th:href="@{'/alumno/panel/' + ${examen.usuario.id}}" class="btn-volver">
+            ⬅ Volver al Panel
+        </a>
+    </div>
+
+</div>
+
+</body>
+</html>

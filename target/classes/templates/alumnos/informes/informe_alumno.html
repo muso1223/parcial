@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Informe Único</title>
+
+    <style>
+        body {
+            font-family: 'Open Sans', 'Segoe UI', sans-serif;
+            background-color: #f7f9fb;
+            color: #1e2b38;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .informe-container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 850px;
+            overflow: hidden;
+        }
+
+        /* Header */
+        .informe-header {
+            background-color: #0b4a70;
+            color: #fff;
+            padding: 25px 30px;
+            text-align: center;
+        }
+        .informe-header h2 {
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        /* Secciones */
+        .seccion {
+            padding: 25px 30px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .seccion h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #0b4a70;
+            border-bottom: 2px solid #c4d92e;
+            display: inline-block;
+            padding-bottom: 4px;
+            font-weight: 600;
+        }
+
+        /* Datos */
+        .datos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px 30px;
+        }
+
+        .dato {
+            background-color: #f1f8fa;
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+        .dato strong {
+            color: #0b4a70;
+            display: block;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+        /* Resultados */
+        .resultados-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .resultado-card {
+            background-color: #f7f9fb;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease;
+        }
+        .resultado-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .resultado-card strong {
+            display: block;
+            font-size: 0.9rem;
+            color: #0b4a70;
+            margin-bottom: 6px;
+        }
+        .resultado-card span {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .anulado {
+            color: #c62828;
+            font-weight: bold;
+        }
+		
+		.volver-container {
+		    text-align: center;
+		    padding: 20px 0;
+		    background-color: #f7f9fb;
+		}
+		.btn-volver {
+		    display: inline-block;
+		    background-color: #c4d92e;
+		    color: #0b4a70;
+		    padding: 10px 25px;
+		    border-radius: 6px;
+		    font-weight: 600;
+		    text-decoration: none;
+		    transition: all 0.2s ease;
+		}
+		.btn-volver:hover {
+		    background-color: #b3c628;
+		}
+
+		@media (max-width: 600px) {
+		    .datos-grid {
+		        grid-template-columns: 1fr;
+		    }
+		    .resultados-grid {
+		        grid-template-columns: 1fr 1fr;
+		    }
+		}
+    </style>
+</head>
+
+<body>
+
+<div class="informe-container">
+
+    <!-- Header -->
+    <div class="informe-header">
+        <h2>Informe Único de Alumno</h2>
+    </div>
+
+    <!-- Datos del alumno -->
+    <div class="seccion">
+        <h3>Datos del Alumno</h3>
+
+        <div class="datos-grid">
+            <div class="dato">
+                <strong>Nombre</strong>
+                <span th:text="${examen.usuario.pnomb + ' ' + examen.usuario.snomb + ' ' + examen.usuario.papellido + ' ' + examen.usuario.sapellido}"></span>
+            </div>
+
+            <div class="dato">
+                <strong>Documento</strong>
+                <span th:text="${examen.usuario.tdoc + ' ' + examen.usuario.numdoc}"></span>
+            </div>
+
+            <div class="dato">
+                <strong>Correo</strong>
+                <span th:text="${examen.usuario.correo}"></span>
+            </div>
+
+            <div class="dato">
+                <strong>Teléfono</strong>
+                <span th:text="${examen.usuario.telefono}"></span>
+            </div>
+
+            <div class="dato">
+                <strong>Registro</strong>
+                <span th:text="${examen.usuario.registro}"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resultados -->
+    <div class="seccion">
+        <h3>Resultados del Examen</h3>
+
+        <div class="resultados-grid">
+
+            <div class="resultado-card">
+                <strong>Puntaje Total</strong>
+                <span th:if="${examen.anulado}" class="anulado">ANULADO</span>
+                <span th:unless="${examen.anulado}" th:text="${examen.puntajetotal}"></span>
+            </div>
+
+            <div class="resultado-card">
+                <strong>Nivel</strong>
+                <span th:if="${examen.anulado}">---</span>
+                <span th:unless="${examen.anulado}"
+                      th:text="${examen.puntajetotal >= 0 and examen.puntajetotal <=125 ? 'Nivel 1' :
+                               examen.puntajetotal >=126 and examen.puntajetotal <=155 ? 'Nivel 2' :
+                               examen.puntajetotal >=156 and examen.puntajetotal <=190 ? 'Nivel 3' :
+                               examen.puntajetotal >=191 and examen.puntajetotal <=300 ? 'Nivel 4' : 'Error'}">
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+	
+	<div class="volver-container">
+		<a th:href="@{'/alumno/panel/' + ${examen.usuario.id}}" class="btn-volver">⬅ Volver al Panel</a>
+	</div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario Examen - Parcial SaberPRO</title>
+    <style>
+        body {
+            background-color: #f7f9fb;
+            font-family: 'Open Sans', 'Segoe UI', sans-serif;
+            color: #1e2b38;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        main { flex: 1; }
+
+        header {
+            background-color: #0b4a70;
+            color: white;
+            padding: 18px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+        }
+
+        header h1 { margin: 0; font-size: 1.4rem; font-weight: 600; }
+
+        .btn-cerrar {
+            background-color: #c4d92e;
+            color: #0b4a70;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+        .btn-cerrar:hover { background-color: #b3c628; }
+
+        .contenedor-principal {
+            width: 95%;
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+        }
+
+        h2 {
+            color: #0b4a70;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #c4d92e;
+            padding-bottom: 6px;
+            text-align: center;
+        }
+
+        form { display: flex; flex-direction: column; gap: 16px; }
+
+        label { font-weight: 600; color: #0b4a70; }
+
+        input, select {
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 0.95rem;
+            transition: border-color 0.2s ease;
+        }
+
+        input:focus, select:focus {
+            border-color: #c4d92e;
+            outline: none;
+        }
+
+        .btn-guardar {
+            background-color: #0b4a70;
+            color: white;
+            padding: 10px 22px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 10px;
+        }
+        .btn-guardar:hover { background-color: #083551; transform: scale(1.03); }
+
+        .volver-contenedor { text-align: center; margin-top: 20px; }
+        .btn-volver {
+            display: inline-block;
+            background-color: #c4d92e;
+            color: #0b4a70;
+            padding: 10px 22px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        .btn-volver:hover { background-color: #b3c628; }
+
+        footer {
+            text-align: center;
+            padding: 15px 0;
+            background-color: #0b4a70;
+            color: white;
+            font-size: 0.9rem;
+            margin-top: auto;
+        }
+
+        @media (max-width: 768px) { .contenedor-principal { padding: 25px; } }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Formulario Examen</h1>
+    <a th:href="@{/logout}" class="btn-cerrar">Cerrar sesión</a>
+</header>
+
+<main>
+    <div class="contenedor-principal">
+        <h2>Registro de Examen</h2>
+
+        <form th:action="@{/coordinador/examenes/guardar}" th:object="${examen}" method="post">
+            <input type="hidden" th:field="*{id}">
+
+            <label>Puntaje Total:</label>
+            <input type="number" th:field="*{puntajetotal}">
+
+            <label>Alumno:</label>
+            <select name="usuarioId">
+                <option th:each="a : ${alumnos}" th:value="${a.id}"
+                        th:text="${a.pnomb + ' ' + a.papellido}"
+                        th:selected="${examen.usuario != null} ? ${a.id} == ${examen.usuario.id} : false">
+                </option>
+            </select>
+
+            <label>Comunicación:</label>
+            <input type="number" th:field="*{comunicacion}">
+
+            <label>Razonamiento:</label>
+            <input type="number" th:field="*{razonamiento}">
+
+            <label>Lectura:</label>
+            <input type="number" th:field="*{lectura}">
+
+            <label>Ciudadana:</label>
+            <input type="number" th:field="*{ciudadana}">
+
+            <label>Inglés:</label>
+            <input type="number" th:field="*{ingles}">
+
+            <label>Proyectos:</label>
+            <input type="number" th:field="*{proyectos}">
+
+            <label>Pensamiento Científico:</label>
+            <input type="number" th:field="*{pcientifico}">
+
+            <label>Diseño de Software:</label>
+            <input type="number" th:field="*{dsoft}">
+
+            <label>Nivel Inglés:</label>
+            <input type="text" th:field="*{nivelingles}">
+
+            <label>Anulado:</label>
+            <input type="checkbox" th:field="*{anulado}">
+
+            <button type="submit" class="btn-guardar">💾 Guardar Examen</button>
+        </form>
+
+        <div class="volver-contenedor">
+            <a href="/coordinador/examenes" class="btn-volver">⬅ Volver al Panel de Exámenes</a>
+        </div>
+    </div>
+</main>
+
+<footer>
+    © Parcial SaberPRO
+</footer>
+
+</body>
+</html>
