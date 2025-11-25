@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel Alumno - Parcial SaberPRO</title>
+    <style>
+        body {
+            background-color: #f7f9fb;
+            font-family: 'Open Sans', 'Segoe UI', sans-serif;
+            color: #1e2b38;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        main { flex: 1; }
+
+        header {
+            background-color: #0b4a70;
+            color: white;
+            padding: 18px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+        }
+
+        header h1 { margin: 0; font-size: 1.4rem; font-weight: 600; }
+
+        .btn-cerrar {
+            background-color: #c4d92e;
+            color: #0b4a70;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-cerrar:hover { background-color: #b3c628; }
+
+        .contenedor-principal {
+            width: 90%;
+            max-width: 900px;
+            margin: 40px auto;
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 40px 50px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+        }
+
+        .bienvenida {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #444;
+            margin-bottom: 30px;
+        }
+
+        .panel-opciones {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .opcion {
+            background-color: #f0f5ff;
+            border: 2px solid #d8e3f0;
+            border-radius: 12px;
+            padding: 25px 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+
+        .opcion:hover {
+            background-color: #eaf2ff;
+            transform: translateY(-4px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .opcion h3 { margin: 15px 0; font-size: 1.1rem; font-weight: 600; }
+
+        .btn-ir {
+            background-color: #0b4a70;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-ir:hover { background-color: #c4d92e; color: #0b4a70; }
+
+        footer {
+            text-align: center;
+            padding: 15px 0;
+            background-color: #0b4a70;
+            color: white;
+            font-size: 0.9rem;
+            letter-spacing: 0.2px;
+            margin-top: auto;
+        }
+
+        a { text-decoration: none; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Panel del Alumno - Parcial SaberPRO</h1>
+    <a th:href="@{/logout}" class="btn-cerrar">Cerrar sesión</a>
+</header>
+
+<main>
+    <div class="contenedor-principal">
+        <div class="bienvenida">
+            Bienvenido(a), <strong th:text="${alumno.pnomb + ' ' + alumno.papellido}"></strong>
+        </div>
+
+        <div class="panel-opciones">
+            <div class="opcion">
+                <h3>Ver Informe Único</h3>
+                <form th:action="@{'/alumno/informes/unico/' + ${alumno.id}}" method="get">
+                    <button type="submit" class="btn-ir">Ir</button>
+                </form>
+            </div>
+
+            <div class="opcion">
+                <h3>Ver Informe Detallado</h3>
+                <form th:action="@{'/alumno/informes/detallado/' + ${alumno.id}}" method="get">
+                    <button type="submit" class="btn-ir">Ir</button>
+                </form>
+            </div>
+
+            <div class="opcion">
+                <h3>Ver Informe de Beneficios</h3>
+                <form th:action="@{'/alumno/informes/beneficios/' + ${alumno.id}}" method="get">
+                    <button type="submit" class="btn-ir">Ir</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer>
+    © Parcial SaberPRO — Panel del Alumno
+</footer>
+
+</body>
+</html>
